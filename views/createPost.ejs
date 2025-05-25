@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-zinc-900">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Post</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen px-6 py-6">
+    <!-- Header -->
+    <div class="flex flex-wrap items-center gap-3 mb-8">
+      <h1 class="text-3xl font-bold text-stone-100 tracking-tight">
+        Let's create something, <%= currentUser.fullname %>!
+      </h1>
+      <a
+        href="/logout"
+        class="text-blue-500 border border-blue-500 rounded-lg px-4 py-2 hover:bg-blue-500 hover:text-white transition-all"
+      >
+        Logout
+      </a>
+      <a
+        href="/home"
+        class="text-blue-500 border border-blue-500 rounded-lg px-4 py-2 hover:bg-blue-500 hover:text-white transition-all"
+      >
+        Home
+      </a>
+    </div>
+
+    <!-- Create Post Form -->
+    <form
+      action="/postCreate"
+      method="POST"
+      class="bg-zinc-800 border border-stone-300 rounded-lg p-6 max-w-xl w-full mx-auto text-stone-200"
+    >
+      <!-- Title Field -->
+      <div class="mb-6">
+        <label for="title" class="block mb-2 text-stone-300 font-medium">
+          Post Title
+        </label>
+        <input
+          type="text"
+          name="title"
+          placeholder="Enter title..."
+          class="w-full bg-transparent border-b border-stone-400 outline-none py-2 placeholder:text-stone-500"
+        />
+      </div>
+
+      <!-- Content Field -->
+      <div class="mb-6">
+        <label for="content" class="block mb-2 text-stone-300 font-medium">
+          Post Content
+        </label>
+        <textarea
+          name="content"
+          rows="5"
+          placeholder="Write your post..."
+          class="w-full bg-transparent border-b border-stone-400 outline-none py-2 placeholder:text-stone-500 resize-none"
+        ></textarea>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-right">
+        <input
+          type="submit"
+          value="Create"
+          class="cursor-pointer bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 transition"
+        />
+      </div>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= post.title %> | View Post</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="h-screen w-screen p-10 bg-zinc-900 text-stone-200 overflow-auto">
+    <div
+      class="max-w-5xl mx-auto bg-zinc-800 border border-stone-700 rounded-lg shadow-lg flex flex-col md:flex-row"
+    >
+      <!-- Left: Post Content -->
+      <div
+        class="flex-1 p-6 border-b md:border-b-0 md:border-r border-stone-700 flex flex-col"
+      >
+        <p class="text-stone-400 text-sm mb-2">
+          By, <%= post.author ? post.author.fullname : "Unknown" %>
+        </p>
+
+        <div class="mb-4">
+          <h1 class="text-3xl font-bold tracking-tight mb-1">
+            <%= post.title %>
+          </h1>
+          <h6 class="text-sm text-blue-400">
+            <%= post.createdAt.toLocaleString('en-IN', { weekday: 'short', year:
+            'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:
+            '2-digit' }) %>
+          </h6>
+        </div>
+
+        <hr class="border-t border-stone-600 my-4" />
+
+        <div class="text-base leading-relaxed flex-grow">
+          <p><%= post.content %></p>
+        </div>
+
+        <div class="mt-6">
+          <a href="/home" class="text-blue-500 hover:underline">← Go back</a>
+        </div>
+      </div>
+
+      <!-- Right: Comments -->
+      <div class="w-full md:w-1/2 p-6">
+        <h2 class="text-2xl font-semibold mb-4">💬 Comments</h2>
+
+        <!-- Comment Form -->
+        <form
+          action="/createComment/<%= post._id %>"
+          method="post"
+          class="mb-6 space-y-3"
+        >
+          <textarea
+            name="commentContent"
+            rows="3"
+            class="w-full p-3 rounded bg-zinc-900 border border-stone-600 resize-none text-stone-200 placeholder-stone-500"
+            placeholder="Write your comment here..."
+          ></textarea>
+          <input
+            type="submit"
+            value="Post Comment"
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded cursor-pointer"
+          />
+        </form>
+
+        <hr class="border-t border-stone-600 mb-4" />
+
+        <!-- Comment List -->
+        <% if (comments && comments.length > 0) { %>
+        <div class="space-y-3 max-h-[300px] overflow-y-auto pr-2">
+          <% for (let i = 0; i < comments.length; i++) { %>
+          <div class="bg-zinc-700 rounded p-3">
+            <p class="font-semibold text-blue-300">
+              <%= comments[i].author ? comments[i].author.fullname : 'Unknown'
+              %>:
+            </p>
+            <p class="ml-2 mt-1 text-stone-300">
+              <%= comments[i].commentContent %>
+            </p>
+          </div>
+          <% } %>
+        </div>
+        <% } else { %>
+        <p class="text-stone-400">No comments yet.</p>
+        <% } %>
+      </div>
+    </div>
+  </body>
+</html>

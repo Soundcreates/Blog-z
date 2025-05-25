@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= user.fullname %>'s Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-zinc-900 text-stone-200 p-10">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl font-bold mb-6">👤 <%= user.fullname %>'s Profile</h1>
+
+      <!--Posts -->
+      <section class="mb-10">
+        <h2 class="text-2xl font-semibold mb-3">📝 Your Posts</h2>
+        <% if (user.posts.length > 0) { %>
+        <ul class="space-y-2">
+          <% user.posts.forEach(post => { %>
+          <li class="bg-zinc-800 p-4 rounded-md border border-stone-700">
+            <h3 class="text-xl font-bold"><%= post.title %></h3>
+            <p class="text-stone-400 text-sm">
+              Posted on <%= post.createdAt ? new
+              Date(post.createdAt).toLocaleString(): "Unknown date"%>
+            </p>
+            <p class="mt-2">
+              <%= post.content? post.content.substring(0, 150) : "No Content"
+              %>...
+            </p>
+            <a
+              href="/seePost/<%= post._id %>"
+              class="text-blue-500 mt-2 inline-block"
+              >Read more →</a
+            >
+          </li>
+          <% }); %>
+        </ul>
+        <% } else { %>
+        <p class="text-stone-400">You haven't created any posts yet.</p>
+        <% } %>
+      </section>
+
+      <!-- Comments -->
+      <section>
+        <h2 class="text-2xl font-semibold mb-3">💬 Your Comments</h2>
+        <% if (foundcomments.length > 0) { %>
+        <ul class="space-y-2">
+          <% foundcomments.forEach(comment => { %>
+          <li class="bg-zinc-800 p-4 rounded-md border border-stone-700">
+            <p>"<%= comment.commentContent %>"</p>
+            <% if (comment.post) { %>
+            <a
+              href="/seePost/<%= comment.post._id %>"
+              class="text-blue-500 text-sm"
+              >View related post →</a
+            >
+            <% } else { %>
+            <span class="text-stone-400">Post deleted</span>
+            <% } %>
+          </li>
+          <% }); %>
+        </ul>
+        <% } else { %>
+        <p class="text-stone-400">You haven't commented on any posts yet.</p>
+        <% } %>
+      </section>
+
+      <div class="mt-10">
+        <a href="/home" class="text-stone-200 hover:text-blue-500"
+          >← Back to Home</a
+        >
+      </div>
+    </div>
+  </body>
+</html>
