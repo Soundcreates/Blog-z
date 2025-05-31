@@ -10,7 +10,81 @@
     <div class="max-w-4xl mx-auto">
       <h1 class="text-4xl font-bold mb-6">👤 <%= user.fullname %>'s Profile</h1>
 
-      <!--Posts -->
+      <!-- Friends Section -->
+      <section class="mb-10">
+        <h2 class="text-2xl font-semibold mb-3">🤝 Your Friends</h2>
+        <% if (user.friends && user.friends.length > 0) { %>
+        <ul class="space-y-2">
+          <% user.friends.forEach(friend => { %>
+          <li class="bg-zinc-800 p-4 rounded-md border border-stone-700">
+            <%= friend.fullname || 'Unknown Friend' %>
+          </li>
+          <% }) %>
+        </ul>
+        <% } else { %>
+        <p class="text-stone-400">You have no friends added yet.</p>
+        <% } %>
+
+        <h3 class="text-xl font-semibold mt-6 mb-2">⏳ Friend Requests Sent</h3>
+        <% if (user.friendRequestsSent && user.friendRequestsSent.length > 0) {
+        %>
+        <ul class="space-y-2">
+          <% user.friendRequestsSent.forEach(request => { %>
+          <li class="bg-zinc-800 p-4 rounded-md border border-stone-700">
+            <%= request.fullname || 'Unknown User' %> - Request Pending
+          </li>
+          <% }) %>
+        </ul>
+        <% } else { %>
+        <p class="text-stone-400">No friend requests sent.</p>
+        <% } %>
+
+        <h3 class="text-xl font-semibold mt-6 mb-2">
+          📩 Friend Requests Received
+        </h3>
+        <% if (user.friendRequestsRecieved && user.friendRequestsRecieved.length
+        > 0) { %>
+        <ul class="space-y-2">
+          <% user.friendRequestsRecieved.forEach(request => { %>
+          <li
+            class="bg-zinc-800 p-4 rounded-md border border-stone-700 flex justify-between items-center"
+          >
+            <span><%= request.fullname || 'Unknown User' %></span>
+            <div class="space-x-2">
+              <form
+                method="POST"
+                action="/acceptFriend/<%= request._id %>"
+                class="inline"
+              >
+                <button
+                  type="submit"
+                  class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
+                >
+                  Accept
+                </button>
+              </form>
+              <form
+                method="POST"
+                action="/rejectFriend/<%= request._id %>"
+                class="inline"
+              >
+                <button
+                  type="submit"
+                  class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+                >
+                  Reject
+                </button>
+              </form>
+            </div>
+          </li>
+          <% }) %>
+        </ul>
+        <% } else { %>
+        <p class="text-stone-400">No friend requests received.</p>
+        <% } %>
+      </section>
+
+      <!-- Posts -->
       <section class="mb-10">
         <h2 class="text-2xl font-semibold mb-3">📝 Your Posts</h2>
         <% if (user.posts.length > 0) { %>
@@ -20,10 +94,10 @@
             <h3 class="text-xl font-bold"><%= post.title %></h3>
             <p class="text-stone-400 text-sm">
               Posted on <%= post.createdAt ? new
-              Date(post.createdAt).toLocaleString(): "Unknown date"%>
+              Date(post.createdAt).toLocaleString() : "Unknown date" %>
             </p>
             <p class="mt-2">
-              <%= post.content? post.content.substring(0, 150) : "No Content"
+              <%= post.content ? post.content.substring(0, 150) : "No Content"
               %>...
             </p>
             <a
@@ -32,7 +106,7 @@
               >Read more →</a
             >
           </li>
-          <% }); %>
+          <% }) %>
         </ul>
         <% } else { %>
         <p class="text-stone-400">You haven't created any posts yet.</p>
@@ -57,7 +131,7 @@
             <span class="text-stone-400">Post deleted</span>
             <% } %>
           </li>
-          <% }); %>
+          <% }) %>
         </ul>
         <% } else { %>
         <p class="text-stone-400">You haven't commented on any posts yet.</p>

@@ -12,7 +12,7 @@ module.exports.profileController = async (req, res) => {
   //   populate: { path: 'post' }
   // }); //no idea how this usermodel.findbyid block worked
 
-  let user = await userModel.findById(decoded.id).populate('comments');
+  let user = await userModel.findById(decoded.id).populate('comments').populate('posts').populate('friends', 'fullname').populate('friendRequestsSent', 'fullname').populate('friendRequestsRecieved', 'fullname');
   let foundcomments = await commentModel.find({ author: decoded.id }).populate('post');
 
   res.render('profile.ejs', { user, foundcomments })

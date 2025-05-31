@@ -15,7 +15,15 @@ let userSchema = mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'comment',
     }
-  ]
+  ],
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+    }
+  ],
+  friendRequestsSent: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
+  friendRequestsRecieved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
 })
 
 module.exports = mongoose.model('user', userSchema);

@@ -18,9 +18,9 @@ module.exports.postController = async (req, res) => {
     const posts = await postModel.find({ author: user }).populate('author').limit(5);
 
     let otherPosts = await postModel.find({ author: { $ne: user } }).populate('author');
+    let currentUser = await userModel.findById(user);
 
-
-    res.render('home.ejs', { posts, otherPosts });
+    res.render('home.ejs', { posts, otherPosts, currentUser });
   }
   catch (err) {
     console.log(err.message);
@@ -84,14 +84,22 @@ module.exports.deletePost = async (req, res) => {
 module.exports.seePost = async (req, res) => {
   let postId = req.params.id;
   let token = req.cookies.token;
+  let decoded = jwt.verify(token, process.env.JWT_KEY);
+  let userId = decoded.id;
+  let currentUser = await userModel.findById(userId).populate('friends');
+
+  let friendIds = currentUser.friends.map(friend => friend._id);
 
 
   let post = await postModel.findOne({ _id: postId }).populate('author');
+
+
   if (!post) {
     return res.redirect('/home'); // or show an error page
   }
   let comments = await commentModel.find({ post: postId }).populate('author');
-  res.render('seePost.ejs', { post, comments });
+
+  res.render('seePost.ejs', { post, comments, currentUser });
 }
 
 module.exports.editPost = async (req, res) => {
@@ -130,4 +138,17 @@ module.exports.createComment = async (req, res) => {
     $push: { comments: comment._id }
   })
   res.redirect(`/seePost/${postId}`);
+}
+
+module.exports.friendPosts = async (req, res) => {
+  let userId = req.params.id;
+
+  let user = await userModel.findById(userId).populate('friends', '_id');
+
+  let friendIds = user.friends.map(friend => friend._id);
+
+  let posts = await postModel.find({ author: { $in: friendIds } }).populate('author');
+
+
+  res.render('friendPosts.ejs', { friendsId: friendIds, posts });
 }
